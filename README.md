@@ -135,6 +135,16 @@ npm run test:unit
 npm run lint
 ```
 
+### Generate basic assets
+
+```sh
+# This package allow you to create assets easily, but it's better have real assets with every sizes
+# Install the package that will generate all sizes needed
+npm install @capacitor/assets --save-dev
+# Create a resources folder and add an image inside and then generate all images needed
+npx capacitor-assets generate
+```
+
 ## Links
 
 See [Capacitor](https://capacitorjs.com/docs/getting-started)
