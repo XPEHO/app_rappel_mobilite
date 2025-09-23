@@ -1,6 +1,72 @@
 # app_rappel_mobilite
 
+Application Vue 3 + TypeScript pour la gestion des rappels de mobilité.
+
 This template should help get you started developing with Vue 3 in Vite.
+
+## Stack Technique
+
+- **Vue 3** - Framework JavaScript progressif
+- **TypeScript** - Superset typé de JavaScript
+- **Vite** - Build tool et serveur de développement
+- **Pinia** - Store management officiel pour Vue 3
+- **Vue Router** - Routage côté client
+- **Vitest** - Framework de test unitaire
+
+## Gestion d'État avec Pinia
+
+Ce projet utilise **Pinia** comme solution de gestion d'état. Pinia est le store officiel pour Vue 3 qui remplace Vuex.
+
+### Configuration
+
+Pinia est configuré dans `src/main.ts` :
+
+```typescript
+import { createPinia } from 'pinia'
+app.use(createPinia())
+```
+
+### Stores Disponibles
+
+#### Counter Store (`src/stores/counter.ts`)
+
+Store d'exemple utilisant la Composition API :
+
+```typescript
+export const useCounterStore = defineStore('counter', () => {
+  const count = ref(0)
+  const doubleCount = computed(() => count.value * 2)
+  
+  function increment() {
+    count.value++
+  }
+
+  return { count, doubleCount, increment }
+})
+```
+
+### Utilisation dans les Composants
+
+Pour utiliser un store dans un composant :
+
+```vue
+<script setup>
+import { useCounterStore } from '@/stores/counter'
+
+const store = useCounterStore()
+</script>
+
+<template>
+  <div>
+    <p>Count: {{ store.count }}</p>
+    <button @click="store.increment()">Increment</button>
+  </div>
+</template>
+```
+
+### Exemple d'Implémentation
+
+Voir `src/views/HomeView.vue` pour un exemple concret d'utilisation du store Pinia dans un composant.
 
 ## Recommended IDE Setup
 
