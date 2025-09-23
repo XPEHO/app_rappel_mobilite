@@ -111,8 +111,9 @@ function deleteReminder(id: number) {
         <button @click="deleteReminder(reminder.id)">Delete</button>
       </li>
     </ul>
-    See Pending Notifications in Alert Button 
-    <button @click="listPendingNotifications()">Show Pending Notifications</button>
+    <button @click="listPendingNotifications()">
+      Show Pending Notifications
+    </button>
   </div>-->
 
   <div class="bottom-action-bar">
@@ -126,6 +127,11 @@ h1 {
   font-size: var(--font-size-xlarge);
   font-weight: var(--font-weight-semibold);
   text-transform: uppercase;
+  background: linear-gradient(to right, #000c14, #f8002f 70%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
 }
 
 h2 {
