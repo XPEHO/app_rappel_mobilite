@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import CounterComponent from '@/components/counterComponent.vue';
+import CounterComponent from '@/components/CounterComponent.vue';
 </script>
 
 <template>
