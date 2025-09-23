@@ -20,6 +20,31 @@ See [Vite Configuration Reference](https://vite.dev/config/).
 npm install
 ```
 
+## Capacitor Setup
+
+```sh
+npm i @capacitor/core
+npm i -D @capacitor/cli
+npx cap init
+npm i @capacitor/android @capacitor/ios
+npx cap add android
+npx cap add ios
+npm install @capacitor/local-notifications
+npm run build
+npx cap sync
+```
+
+### Compile and run with capacitor
+
+```sh
+# Build the Vue app
+npm run build
+# Copy web assets to native platforms and sync plugins
+npx cap sync
+# Run the native app on Android or iOS
+npx cap run android # or ios
+```
+
 ### Compile and Hot-Reload for Development
 
 ```sh
@@ -43,3 +68,8 @@ npm run test:unit
 ```sh
 npm run lint
 ```
+
+## Links
+
+See [Capacitor](https://capacitorjs.com/docs/getting-started)
+See [Notifications](https://capacitorjs.com/docs/apis/local-notifications)

@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">app_rappel_mobilite</string>
+    <string name="title_activity_main">app_rappel_mobilite</string>
+    <string name="package_name">com.xpeho.app.rappel</string>
+    <string name="custom_url_scheme">com.xpeho.app.rappel</string>
+</resources>
