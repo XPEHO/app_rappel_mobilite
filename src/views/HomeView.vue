@@ -81,7 +81,7 @@ function deleteReminder(id: number) {
         <button @click="deleteReminder(reminder.id)">Delete</button>
       </li>
     </ul>
-    <!-- See Pending Notifications in Alert Button  -->
+    <!-- See Pending Notifications in Alert Button -->
     <button @click="listPendingNotifications()">
       Show Pending Notifications
     </button>
