@@ -1,19 +1,14 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
-import { LocalNotifications, PermissionStatus } from "@capacitor/local-notifications";
-import { loadReminders, saveReminders } from "@/local_storage/reminder_service";
-import {
-  scheduleNotification,
-  cancelNotification,
-  listPendingNotifications,
-} from "@/notification/notification_service";
-import { Reminder } from "@/types/reminder";
+import { LocalNotifications } from "@capacitor/local-notifications";
 import TaskTile from "@/components/TaskTile.vue";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
 import AppButton from "@/components/buttons/AppButton.vue";
+import { useReminderStore } from "@/stores/reminders";
 
-const reminders = ref<Reminder[]>(loadReminders());
+const reminderStore = useReminderStore();
+
 const newReminder = ref<{
   title: string;
   datetime: string;
@@ -24,28 +19,12 @@ const newReminder = ref<{
   repeatMode: "none",
 });
 
-let permission: PermissionStatus | null = null;
-
-onMounted(async () => {
-  // Request permissions on app start
-  permission = await LocalNotifications.requestPermissions();
-});
-
 function addReminder() {
-  const id = Date.now() % 2147483647;
-  const reminder = new Reminder(
-    id,
+  reminderStore.addReminder(
     newReminder.value.title,
     newReminder.value.datetime,
     newReminder.value.repeatMode
   );
-  reminders.value.push(reminder);
-  saveReminders(reminders.value);
-  if (permission && permission.display === "granted") {
-    scheduleNotification(reminder);
-  } else {
-    alert("Notification permission not granted");
-  }
   newReminder.value = {
     title: "",
     datetime: "",
@@ -53,68 +32,37 @@ function addReminder() {
   };
 }
 
-function deleteReminder(id: number) {
-  reminders.value = reminders.value.filter((r) => r.id !== id);
-  saveReminders(reminders.value);
-  cancelNotification(id);
-}
+onMounted(async () => {
+  // Request permissions on app start
+  reminderStore.init();
+  reminderStore.setPermission(await LocalNotifications.requestPermissions());
+});
 </script>
 
 <template>
-  <div style="padding-bottom: 100px; width: 100%;">
-    <h1>Remembrall</h1>
+ <div style="padding-bottom: 100px; width: 100%;">
+  <h1>Remembrall</h1>
 
-    <div class="task-empty" v-if="reminders.length === 0">
-      <font-awesome-icon :icon="faCheckCircle" style="color: var(--accent-color)" />
-    </div>
-
-    <h2>This day, Sat. 6 jun</h2>
-    <div class="task-list">
-      <task-tile v-for="reminder in reminders" :key="reminder.id" :id="reminder.id" :title="reminder.title"
-        :date="reminder.getTimeString()" />
-    </div>
-
-    <h2>Tomorrow, Sun. 7 jun</h2>
-    <div class="task-list">
-      <task-tile :id="1" title="Tondre la pelouse" date="11h20" />
-      <task-tile :id="2" title="Faire les courses" date="14h00" />
-      <task-tile :id="3" title="Réunion avec l'équipe" date="16h30" />
-    </div>
-
-    <h2>Next week</h2>
-    <div class="task-list">
-      <task-tile :id="1" title="Tondre la pelouse" date="Mon. 8 Jun" />
-      <task-tile :id="2" title="Faire les courses" date="Tue. 9 Jun" />
-      <task-tile :id="3" title="Réunion avec l'équipe" date="Thu. 11 Jun" />
-    </div>
+  <div class="task-empty" v-if="Object.keys(reminderStore.remindersByDate).length === 0">
+    <font-awesome-icon :icon="faCheckCircle" style="color: var(--accent-color)" />
   </div>
 
-  <!--<div>
-    <input v-model="newReminder.title" placeholder="Title" />
-    <input v-model="newReminder.datetime" type="datetime-local" />
-    <select v-model="newReminder.repeatMode">
-      <option
-        v-for="mode in ['minutely', 'daily', 'weekly', 'monthly', 'yearly', 'none']"
-        :key="mode"
-        :value="mode"
-      >
-        {{ mode.charAt(0).toUpperCase() + mode.slice(1) }}
-      </option>
-    </select>
-    <button class="new-reminder" @click="addReminder">Add</button>
-
-    <ul>
-      <li v-for="reminder in reminders" :key="reminder.id">
-        {{ reminder.title }} - {{ reminder.datetime }}
-        <button @click="deleteReminder(reminder.id)">Delete</button>
-      </li>
-    </ul>
-    See Pending Notifications in Alert Button 
-    <button @click="listPendingNotifications()">Show Pending Notifications</button>
-  </div>-->
+  <div class="task-section" :key="key" v-for="(reminders, key) in reminderStore.remindersByDate">
+    <h2>{{ key }}</h2>
+    <div class="task-list">
+      <task-tile
+        v-for="reminder in reminders"
+        :key="reminder.id"
+        :id="reminder.id"
+        :title="reminder.title"
+        :date="reminder.getTimeString()"
+      />
+    </div>
+  </div>
+     </div>
 
   <div class="bottom-action-bar">
-    <app-button :text="'Create new task'" />
+    <app-button :text="'Create new task'" @click="addReminder()" />
   </div>
 </template>
 
@@ -124,6 +72,20 @@ h1 {
   font-size: var(--font-size-xlarge);
   font-weight: var(--font-weight-semibold);
   text-transform: uppercase;
+  background: linear-gradient(to right, #000c14, #f8002f 70%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+.task-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  gap: var(--element-gap);
 }
 
 h2 {
