@@ -14,6 +14,7 @@
     "lint": "eslint . --fix"
   },
   "dependencies": {
+    "@yaki_ui/yaki_ui_web_components": "https://gitpkg.now.sh/XPEHO/yaki_ui/web?main",
     "@capacitor/android": "^7.4.3",
     "@capacitor/core": "^7.4.3",
     "@capacitor/ios": "^7.4.3",
@@ -40,6 +41,7 @@
     "jiti": "^2.4.2",
     "jsdom": "^26.0.0",
     "npm-run-all2": "^7.0.2",
+    "sass-embedded": "^1.93.2",
     "typescript": "~5.8.0",
     "vite": "^6.2.4",
     "vite-plugin-vue-devtools": "^8.0.2",

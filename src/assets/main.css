@@ -1,5 +1,20 @@
 @import './base.css';
 
+@font-face {
+  font-family: "Rubik";
+  src: url("../../../node_modules/@yaki_ui/yaki_ui_web_components/fonts/Rubik-VariableFont_wght.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "SF-compact-Rounded";
+  src: url("../../../node_modules/@yaki_ui/yaki_ui_web_components/fonts/SF-Compact-Rounded-Regular.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "SF-Pro-Rounded";
+  src: url("../../../node_modules/@yaki_ui/yaki_ui_web_components/fonts/SF-Pro-Rounded-Regular.otf") format("truetype");
+}
+
 #app {
   max-width: 1280px;
   margin: 0 auto;
