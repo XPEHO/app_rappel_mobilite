@@ -89,6 +89,30 @@ function deleteReminder(id: number) {
     </div>
   </div>
 
+  <!--<div>
+    <input v-model="newReminder.title" placeholder="Title" />
+    <input v-model="newReminder.datetime" type="datetime-local" />
+    <select v-model="newReminder.repeatMode">
+      <option
+        v-for="mode in ['minutely', 'daily', 'weekly', 'monthly', 'yearly', 'none']"
+        :key="mode"
+        :value="mode"
+      >
+        {{ mode.charAt(0).toUpperCase() + mode.slice(1) }}
+      </option>
+    </select>
+    <button class="new-reminder" @click="addReminder">Add</button>
+
+    <ul>
+      <li v-for="reminder in reminders" :key="reminder.id">
+        {{ reminder.title }} - {{ reminder.datetime }}
+        <button @click="deleteReminder(reminder.id)">Delete</button>
+      </li>
+    </ul>
+    See Pending Notifications in Alert Button 
+    <button @click="listPendingNotifications()">Show Pending Notifications</button>
+  </div>-->
+
   <div class="bottom-action-bar">
     <app-button :text="'Create new task'" />
   </div>
