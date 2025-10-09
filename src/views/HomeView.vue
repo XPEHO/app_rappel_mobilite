@@ -40,22 +40,19 @@ onMounted(async () => {
 </script>
 
 <template>
-  <h1>Remembrall</h1>
+  <div class="page-content">
+    <h1>Remembrall</h1>
 
-  <div class="task-empty" v-if="Object.keys(reminderStore.remindersByDate).length === 0">
-    <font-awesome-icon :icon="faCheckCircle" style="color: var(--accent-color)" />
-  </div>
+    <div class="task-empty" v-if="Object.keys(reminderStore.remindersByDate).length === 0">
+      <font-awesome-icon :icon="faCheckCircle" style="color: var(--accent-color)" />
+    </div>
 
-  <div class="task-section" :key="key" v-for="(reminders, key) in reminderStore.remindersByDate">
-    <h2>{{ key }}</h2>
-    <div class="task-list">
-      <task-tile
-        v-for="reminder in reminders"
-        :key="reminder.id"
-        :id="reminder.id"
-        :title="reminder.title"
-        :date="reminder.getTimeString()"
-      />
+    <div class="task-section" :key="key" v-for="(reminders, key) in reminderStore.remindersByDate">
+      <h2>{{ key }}</h2>
+      <div class="task-list">
+        <task-tile v-for="reminder in reminders" :key="reminder.id" :id="reminder.id" :title="reminder.title"
+          :date="reminder.getTimeString()" />
+      </div>
     </div>
   </div>
 
@@ -65,6 +62,11 @@ onMounted(async () => {
 </template>
 
 <style scoped>
+.page-content {
+  padding-bottom: 100px;
+  width: 100%;
+}
+
 h1 {
   font-family: var(--primary-font-family);
   font-size: var(--font-size-xlarge);
