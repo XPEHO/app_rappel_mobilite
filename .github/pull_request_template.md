@@ -5,7 +5,7 @@
 ...
 
 ## I want a manual testing of my code by reviewers
-#### If you select "No", you authorize reviewers to check your code without running the application
+> If you select "No", you authorize reviewers to check your code without running the application
 
 - [ ] Yes
 - [ ] No
