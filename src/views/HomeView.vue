@@ -61,59 +61,33 @@ function deleteReminder(id: number) {
 </script>
 
 <template>
-  <h1>Remembrall</h1>
+  <div style="padding-bottom: 100px; width: 100%;">
+    <h1>Remembrall</h1>
 
-  <div class="task-empty" v-if="reminders.length === 0">
-    <font-awesome-icon :icon="faCheckCircle" style="color: var(--accent-color)" />
+    <div class="task-empty" v-if="reminders.length === 0">
+      <font-awesome-icon :icon="faCheckCircle" style="color: var(--accent-color)" />
+    </div>
+
+    <h2>This day, Sat. 6 jun</h2>
+    <div class="task-list">
+      <task-tile v-for="reminder in reminders" :key="reminder.id" :id="reminder.id" :title="reminder.title"
+        :date="reminder.getTimeString()" />
+    </div>
+
+    <h2>Tomorrow, Sun. 7 jun</h2>
+    <div class="task-list">
+      <task-tile :id="1" title="Tondre la pelouse" date="11h20" />
+      <task-tile :id="2" title="Faire les courses" date="14h00" />
+      <task-tile :id="3" title="Réunion avec l'équipe" date="16h30" />
+    </div>
+
+    <h2>Next week</h2>
+    <div class="task-list">
+      <task-tile :id="1" title="Tondre la pelouse" date="Mon. 8 Jun" />
+      <task-tile :id="2" title="Faire les courses" date="Tue. 9 Jun" />
+      <task-tile :id="3" title="Réunion avec l'équipe" date="Thu. 11 Jun" />
+    </div>
   </div>
-
-  <h2>This day, Sat. 6 jun</h2>
-  <div class="task-list">
-    <task-tile
-      v-for="reminder in reminders"
-      :key="reminder.id"
-      :id="reminder.id"
-      :title="reminder.title"
-      :date="reminder.getTimeString()"
-    />
-  </div>
-
-  <h2>Tomorrow, Sun. 7 jun</h2>
-  <div class="task-list">
-    <task-tile :id="1" title="Tondre la pelouse" date="11h20" />
-    <task-tile :id="2" title="Faire les courses" date="14h00" />
-    <task-tile :id="3" title="Réunion avec l'équipe" date="16h30" />
-  </div>
-
-  <h2>Next week</h2>
-  <div class="task-list">
-    <task-tile :id="1" title="Tondre la pelouse" date="Mon. 8 Jun" />
-    <task-tile :id="2" title="Faire les courses" date="Tue. 9 Jun" />
-    <task-tile :id="3" title="Réunion avec l'équipe" date="Thu. 11 Jun" />
-  </div>
-  <!--<div>
-    <input v-model="newReminder.title" placeholder="Title" />
-    <input v-model="newReminder.datetime" type="datetime-local" />
-    <select v-model="newReminder.repeatMode">
-      <option
-        v-for="mode in ['minutely', 'daily', 'weekly', 'monthly', 'yearly', 'none']"
-        :key="mode"
-        :value="mode"
-      >
-        {{ mode.charAt(0).toUpperCase() + mode.slice(1) }}
-      </option>
-    </select>
-    <button class="new-reminder" @click="addReminder">Add</button>
-
-    <ul>
-      <li v-for="reminder in reminders" :key="reminder.id">
-        {{ reminder.title }} - {{ reminder.datetime }}
-        <button @click="deleteReminder(reminder.id)">Delete</button>
-      </li>
-    </ul>
-    See Pending Notifications in Alert Button 
-    <button @click="listPendingNotifications()">Show Pending Notifications</button>
-  </div>-->
 
   <div class="bottom-action-bar">
     <app-button :text="'Create new task'" />
