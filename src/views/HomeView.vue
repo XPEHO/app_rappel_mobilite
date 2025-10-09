@@ -1,7 +1,12 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
 import { LocalNotifications, PermissionStatus } from "@capacitor/local-notifications";
-import { loadReminders } from "@/local_storage/reminder_service";
+import { loadReminders, saveReminders } from "@/local_storage/reminder_service";
+import {
+  scheduleNotification,
+  cancelNotification,
+  listPendingNotifications,
+} from "@/notification/notification_service";
 import type { Reminder } from "@/types/reminder";
 import AppButton from "@/components/buttons/AppButton.vue";
 
@@ -23,6 +28,28 @@ onMounted(async () => {
   permission = await LocalNotifications.requestPermissions();
 });
 
+function addReminder() {
+  const id = Date.now() % 2147483647;
+  const reminder = { ...newReminder.value, id };
+  reminders.value.push(reminder);
+  saveReminders(reminders.value);
+  if (permission && permission.display === "granted") {
+    scheduleNotification(reminder);
+  } else {
+    alert("Notification permission not granted");
+  }
+  newReminder.value = {
+    title: "",
+    datetime: "",
+    repeatMode: "none",
+  };
+}
+
+function deleteReminder(id: number) {
+  reminders.value = reminders.value.filter((r) => r.id !== id);
+  saveReminders(reminders.value);
+  cancelNotification(id);
+}
 </script>
 
 <template>
