@@ -40,7 +40,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div style="padding-bottom: 100px; width: 100%;">
+  <div class="page-content">
     <h1>Remembrall</h1>
 
     <div class="task-empty" v-if="Object.keys(reminderStore.remindersByDate).length === 0">
@@ -62,6 +62,12 @@ onMounted(async () => {
 </template>
 
 <style scoped>
+.page-content {
+  padding-bottom: 100px;
+  /* 80px de barre + 20px de marge */
+  width: 100%;
+}
+
 h1 {
   font-family: var(--primary-font-family);
   font-size: var(--font-size-xlarge);
