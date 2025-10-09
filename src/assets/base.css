@@ -32,6 +32,7 @@
   --font-weight-bold: 700;
 }
 
+// Commented for the moment before the future dark mode implementation
 /*@media (prefers-color-scheme: dark) {
   :root {
     --color-background: var(--vt-c-black);
