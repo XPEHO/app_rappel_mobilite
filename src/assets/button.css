@@ -1,0 +1,52 @@
+:root {
+  --background-color-button-primary: #F8002F;
+  --background-color-button-darker-primary: color-mix(
+    in srgb,
+    var(--background-color-button-primary),
+    #000 15%
+  );
+
+  --box-shadow-heigh-button: 4px;
+  --animation-translate-y-button: var(--box-shadow-heigh-button);
+
+  --height-button-primary: 68px;
+  --height-button-secondary: 46px;
+
+  --padding-inline-button-content-sized: 14px;
+
+  --width-button-icon: 22px;
+}
+
+/* BUTTON BASE STYLE  */
+.button--general {
+  border-radius: var(--border-radius-base);
+  border: 2px solid;
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  &:active {
+    transform: translateY(var(--animation-translate-y-button));
+    box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0.15);
+  }
+}
+
+/* BUTTON COLOR */
+.button--color-primary {
+  background-color: var(--background-color-button-primary);
+  border-color: var(--background-color-button-darker-primary);
+  box-shadow: 0px var(--box-shadow-heigh-button) 0px 0px
+    var(--background-color-button-darker-primary);
+}
+
+/* BUTTON SIZING */
+.button--height-secondary {
+  height: var(--height-button-secondary);
+  /* padding inline when its content sized */
+  padding-inline: var(--padding-inline-button-content-sized);
+}
+
+.button--width-100-pct {
+  width: 100%;
+}

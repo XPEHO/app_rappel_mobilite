@@ -30,6 +30,6 @@ onMounted(async () => {
   <h1>Accueil</h1>
   <p>Bienvenue sur l'application de rappel mobilité</p>
   <div style="display: flex; justify-content: center; margin-top: 16px;">
-    <ButtonTextSized :text="'Create new task'" type="submit" style="color: white;" />
+    <ButtonTextSized :text="'Create new task'" type="submit" />
   </div>
 </template>
