@@ -1,9 +1,15 @@
-import type { Reminder } from '@/types/reminder';
+import { Reminder } from "@/types/reminder";
 
 export function saveReminders(reminders: Reminder[]) {
   localStorage.setItem("reminders", JSON.stringify(reminders));
 }
 
 export function loadReminders(): Reminder[] {
-  return JSON.parse(localStorage.getItem("reminders") || "[]");
+  const stored = localStorage.getItem("reminders");
+  if (!stored) return [];
+
+  const plainObjects = JSON.parse(stored);
+  return plainObjects.map(
+    (obj: any) => new Reminder(obj.id, obj.title, obj.datetime, obj.repeatMode)
+  );
 }
