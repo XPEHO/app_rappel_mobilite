@@ -1,25 +1,31 @@
-# Description
-What are changes related to ?
+# 💡 Pull Request
 
-# Linked Issues
-What are the issues fixed by this pull request ?
+## Description of the changes
 
-# Changes
-What does it change ?
-Is is a breaking change ?
-Is is a new feature ?
-Is is a patch, fix, hotfix ?
+...
 
-# Screenshots
-Put screenshots (if any)
+## I want a manual testing of my code by reviewers
+### If you select "No", you authorize reviewers to check your code without running the application
 
-# Tests
-How has it been tested ?
+- [ ] Yes
+- [ ] No
 
-- [ ] Manually
-- [ ] Automated tests
-- [ ] QA
-- [ ] Other
+### If yes, please describe how it can be tested:
+
+1.
+2.
+3.
+
+## Images, screenshots and videos
+
+N/A
+
+## I created tests (unit tests, integration tests...)
+
+#### ℹ️ Write « N/A » if no testing is necessary
+
+- [ ] Yes
 
 # Additional information
-Precise any other information
+
+N/A
