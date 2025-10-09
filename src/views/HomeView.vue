@@ -64,7 +64,6 @@ onMounted(async () => {
 <style scoped>
 .page-content {
   padding-bottom: 100px;
-  /* 80px de barre + 20px de marge */
   width: 100%;
 }
 
