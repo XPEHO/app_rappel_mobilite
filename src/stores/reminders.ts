@@ -1,11 +1,10 @@
-import { ref, computed } from "vue";
+import { ref} from "vue";
 import { defineStore } from "pinia";
 import { loadReminders, saveReminders } from "@/local_storage/reminder_service";
 import { PermissionStatus } from "@capacitor/local-notifications";
 import {
   scheduleNotification,
   cancelNotification,
-  listPendingNotifications,
 } from "@/notification/notification_service";
 import { Reminder } from "@/types/reminder";
 
@@ -30,6 +29,26 @@ export const useReminderStore = defineStore("reminder", () => {
     reminders.value = reminders.value.filter((r) => r.id !== id);
     save();
     cancelNotification(id);
+  }
+
+  function updateReminder(id: number, title: string, date: string, repeatMode: Reminder["repeatMode"]) {
+    const reminderIndex = reminders.value.findIndex((r) => r.id === id);
+    if (reminderIndex !== -1) {
+      // Cancel the old notification
+      cancelNotification(id);
+
+      // Update the reminder
+      reminders.value[reminderIndex].title = title;
+      reminders.value[reminderIndex].datetime = date;
+      reminders.value[reminderIndex].repeatMode = repeatMode;
+
+      save();
+
+      // Schedule new notification
+      if (permission.value && permission.value.display === "granted") {
+        scheduleNotification(reminders.value[reminderIndex]);
+      }
+    }
   }
 
   function setPermission(status: PermissionStatus) {
@@ -89,5 +108,18 @@ export const useReminderStore = defineStore("reminder", () => {
     init();
   }
 
-  return { remindersByDate, reminders, addReminder, deleteReminder, setPermission, init };
+  function getReminderById(id: number) {
+    return reminders.value.find(r => r.id === id);
+  }
+
+  return {
+    remindersByDate,
+    reminders,
+    addReminder,
+    deleteReminder,
+    updateReminder,
+    getReminderById,
+    setPermission,
+    init
+  };
 });

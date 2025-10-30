@@ -1,10 +1,14 @@
 <script setup lang="ts">
-import { defineProps, defineEmits, ref } from 'vue'
+import { defineProps, defineEmits, ref, watch } from 'vue'
 import { useReminderStore } from "@/stores/reminders";
 import RedButton from "@/components/buttons/AppButton.vue";
 import WhiteButton from "@/components/buttons/WhiteButton.vue";
+import type { Reminder } from "@/types/reminder";
 
-const props = defineProps<{ isSheetOpen: boolean }>()
+const props = defineProps<{
+  isSheetOpen: boolean;
+  editingReminder?: Reminder | null;
+}>()
 const emit = defineEmits(['close'])
 const closeSheet = () => emit('close')
 const newReminder = ref({
@@ -15,19 +19,42 @@ const newReminder = ref({
 
 const reminderStore = useReminderStore();
 
+// Watch for editing reminder changes
+watch(() => props.editingReminder, (newEditingReminder) => {
+  if (newEditingReminder) {
+    // Mode édition : pré-remplir les champs
+    newReminder.value.title = newEditingReminder.title;
+    newReminder.value.datetime = newEditingReminder.datetime;
+    newReminder.value.repeatMode = newEditingReminder.repeatMode as 'none' | 'daily' | 'weekly';
+    selectedDate.value = newEditingReminder.datetime;
+    updateDisplayDate();
+  } else {
+    // Mode création : vider les champs
+    clearReminder();
+  }
+}, { immediate: true });
+
 function addReminder() {
-  reminderStore.addReminder(
-    newReminder.value.title,
-    newReminder.value.datetime,
-    newReminder.value.repeatMode
-  );
-  newReminder.value = {
-    title: "",
-    datetime: "",
-    repeatMode: "none",
-  };
-  selectedDate.value = ''
-  displayDate.value = ''
+  if (props.editingReminder) {
+    // Mode édition
+    reminderStore.updateReminder(
+      props.editingReminder.id,
+      newReminder.value.title,
+      newReminder.value.datetime,
+      newReminder.value.repeatMode
+    );
+  } else {
+    // Mode création
+    reminderStore.addReminder(
+      newReminder.value.title,
+      newReminder.value.datetime,
+      newReminder.value.repeatMode
+    );
+  }
+
+  clearReminder();
+  selectedDate.value = '';
+  displayDate.value = '';
 }
 
 function clearReminder() {
@@ -83,7 +110,7 @@ function updateDisplayDate() {
         </select>
         <div class="row">
           <white-button :text="'Annuler'" @click="closeSheet(); clearReminder()" class="button-size" />
-          <red-button :text="'Valider'" @click="addReminder(); closeSheet()" class="button-size" />
+          <red-button :text="props.editingReminder ? 'Modifier' : 'Créer'" @click="addReminder(); closeSheet()" class="button-size" />
         </div>
       </div>
     </div>
