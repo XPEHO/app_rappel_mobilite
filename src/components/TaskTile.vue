@@ -136,7 +136,6 @@ function clearLongPressTimer() {
 function onLongPress() {
   // Show the popup on long press
   showPopup.value = true;
-  console.log(`Task long pressed: ${props.title}`);
 }
 
 function triggerSwipeAction() {
@@ -153,7 +152,6 @@ function triggerSwipeAction() {
 function onSwipeLeft() {
   // Emit an event that parent components can listen to
   emit("task-done", { id: props.id, title: props.title, date: props.date });
-  console.log(`Task completed: ${props.title}`);
 }
 
 function closePopup() {
@@ -161,9 +159,10 @@ function closePopup() {
 }
 
 function editTask() {
+  // Close popup first
+  showPopup.value = false;
   // Emit edit event to parent component
   emit("edit-task", { id: props.id, title: props.title, date: props.date });
-  console.log(`Edit task: ${props.title}`);
 }
 
 function deleteTask() {

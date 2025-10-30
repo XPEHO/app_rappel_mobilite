@@ -7,39 +7,32 @@ import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
 import AppButton from "@/components/buttons/AppButton.vue";
 import { useReminderStore } from "@/stores/reminders";
 import BottomSheet from "@/components/bottom_sheet/BottomSheet.vue";
+import type { Reminder } from "@/types/reminder";
 
 const reminderStore = useReminderStore();
 
-const isSheetOpen = ref(false)
+const isSheetOpen = ref(false);
+const editingReminder = ref<Reminder | null>(null);
 
 function openSheet() {
-  isSheetOpen.value = true
+  editingReminder.value = null;
+  isSheetOpen.value = true;
+}
+
+function openEditSheet(task: { id: number; title: string; date: string }) {
+  editingReminder.value = reminderStore.getReminderById(task.id) || null;
+  isSheetOpen.value = true;
 }
 
 function closeSheet() {
-  isSheetOpen.value = false
+  isSheetOpen.value = false;
+  editingReminder.value = null;
 }
 
-// TODO: Remove these functions when not needed anymore
-function addTestReminders() {
-  reminderStore.addReminder("Faire les courses", "2025-10-09T09:47", "none");
-  reminderStore.addReminder("Faire les course 2", "2025-10-09T18:30", "none");
-  reminderStore.addReminder("Réunion avec l'équipe", "2025-10-10T10:30", "none");
-  reminderStore.addReminder("Réunion avec l'équipe 2", "2025-10-10T14:30", "none");
-  reminderStore.addReminder("Tondre la pelouse", "2025-10-13T09:55", "none");
-  reminderStore.addReminder("Tondre la pelouse 2", "2025-10-13T13:51", "none");
-  reminderStore.addReminder("Appeler le plombier", "2025-10-16T16:00", "none");
-  reminderStore.addReminder("Appeler le plombier 2", "2025-10-16T16:30", "none");
-  reminderStore.addReminder("Dentiste", "2025-10-20T11:15", "none");
-  reminderStore.addReminder("Dentiste 2", "2025-10-20T15:45", "none");
+function handleTaskDone(task: { id: number; title: string; date: string }) {
+  reminderStore.deleteReminder(task.id);
 }
 
-// TODO: Remove this function when not needed anymore
-function cleanReminders() {
-  reminderStore.reminders.forEach((reminder) => {
-    reminderStore.deleteReminder(reminder.id);
-  });
-}
 
 onMounted(async () => {
   // Request permissions on app start
@@ -52,25 +45,21 @@ onMounted(async () => {
   <div class="page-content">
     <h1>Remembrall</h1>
 
-    <!--TODO: Remove this button when not needed anymore-->
-    <app-button :text="'Clean tasks'" @click="cleanReminders" />
-
     <div class="task-empty" v-if="Object.keys(reminderStore.remindersByDate).length === 0">
       <font-awesome-icon :icon="faCheckCircle" style="color: var(--accent-color)" />
       <p>
-        <span>Félicitations !</span><br />
-        Aucune tâche pour le moment<br />
-        Cliquez sur le bouton ci-dessous pour créer une nouvelle tâche
+        <span>Tout est terminé ici !</span><br />
       </p>
-      <!--TODO: Remove this button when not needed anymore-->
-      <app-button :text="'Add test tasks'" @click="addTestReminders" />
     </div>
 
     <div class="task-section" :key="key" v-for="(reminders, key) in reminderStore.remindersByDate">
       <h2>{{ key }}</h2>
       <div class="task-list">
         <task-tile v-for="reminder in reminders" :key="reminder.id" :id="reminder.id" :title="reminder.title"
-          :date="reminder.getTimeString()" />
+          :date="reminder.getTimeString()"
+          @task-done="handleTaskDone"
+          @edit-task="openEditSheet"
+          @delete-task="reminderStore.deleteReminder(reminder.id);" />
       </div>
     </div>
   </div>
@@ -79,7 +68,7 @@ onMounted(async () => {
     <app-button :text="'Créer une nouvelle tâche'" @click="openSheet" />
   </div>
 
-  <BottomSheet :isSheetOpen="isSheetOpen" @close="closeSheet"></BottomSheet>
+  <BottomSheet :isSheetOpen="isSheetOpen" :editingReminder="editingReminder" @close="closeSheet"></BottomSheet>
 </template>
 
 <style scoped>
