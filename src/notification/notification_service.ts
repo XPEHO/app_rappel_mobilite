@@ -30,7 +30,7 @@ export async function scheduleNotification(reminder: Reminder) {
       ],
     });
   } catch (error) {
-    alert(`Error scheduling notification: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    alert(`Error scheduling notification: ${error instanceof Error ? error.message : "Unknown error"}`);
     console.error("Notification scheduling error:", error);
   }
 }

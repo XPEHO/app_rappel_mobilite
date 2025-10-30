@@ -22,7 +22,6 @@ export class Reminder {
 
   getNextOccurrence(): Date {
     const baseDate = new Date(this.datetime);
-    const now = new Date();
 
     if (this.repeatMode === "none") {
       return baseDate;

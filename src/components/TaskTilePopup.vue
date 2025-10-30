@@ -1,9 +1,9 @@
 <script setup>
 import { defineProps, defineEmits, onMounted, onUnmounted, ref } from "vue";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import { faPen, faTrash, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { faPen, faXmark } from "@fortawesome/free-solid-svg-icons";
 
-const props = defineProps({
+defineProps({
   visible: { type: Boolean, default: false },
 });
 
@@ -69,6 +69,7 @@ onUnmounted(() => {
   right: 0;
   transform: translateY(8px);
 }
+
 .task-tile-popup-option {
   display: flex;
   flex-flow: row nowrap;
@@ -76,6 +77,7 @@ onUnmounted(() => {
   justify-content: flex-start;
   gap: var(--element-gap);
 }
+
 button {
   border: none;
   background: none;

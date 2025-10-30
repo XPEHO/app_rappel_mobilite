@@ -131,8 +131,13 @@ npm run test:unit
 
 ### Lint with [ESLint](https://eslint.org/)
 
+Handle lint in eslint.config.ts
+
 ```sh
+# To check files with lint rules
 npm run lint
+# To fix files with lint rules
+npm run lint -- --fix
 ```
 
 ### Generate basic assets
