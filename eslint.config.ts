@@ -15,18 +15,31 @@ export default defineConfigWithVueTs(
     files: ['**/*.{ts,mts,tsx,vue}'],
   },
 
-  globalIgnores(['**/dist/**', '**/dist-ssr/**', '**/coverage/**']),
+  // Ignore files here
+  globalIgnores(['**/dist/**', '**/dist-ssr/**', '**/coverage/**', 'src/shims-vue.d.ts']),
 
   pluginVue.configs['flat/essential'],
   vueTsConfigs.recommended,
-  
+
   {
     ...pluginVitest.configs.recommended,
     files: ['src/**/__tests__/*'],
   },
-  
+
   {
     ...pluginPlaywright.configs['flat/recommended'],
     files: ['e2e/**/*.{test,spec}.{js,ts,jsx,tsx}'],
   },
+
+  {
+    files: ['**/*.{ts,mts,tsx,vue}'],
+    rules: {
+      // Add rules here
+      'vue/block-lang': 'off',
+      '@typescript-eslint/no-explicit-any': 'off',
+      'vue/no-unused-components': 'warn',
+      'vue/no-unused-vars': 'warn',
+      'quotes': 'warn',
+    },
+  }
 )

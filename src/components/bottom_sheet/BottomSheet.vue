@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { defineProps, defineEmits, ref, watch } from 'vue'
+import { defineProps, defineEmits, ref, watch } from "vue"
 import { useReminderStore } from "@/stores/reminders";
 import RedButton from "@/components/buttons/AppButton.vue";
 import WhiteButton from "@/components/buttons/WhiteButton.vue";
@@ -9,12 +9,12 @@ const props = defineProps<{
   isSheetOpen: boolean;
   editingReminder?: Reminder | null;
 }>()
-const emit = defineEmits(['close'])
-const closeSheet = () => emit('close')
+const emit = defineEmits(["close"])
+const closeSheet = () => emit("close")
 const newReminder = ref({
-  title: '',
-  datetime: '',
-  repeatMode: 'none' as 'none' | 'daily' | 'weekly'
+  title: "",
+  datetime: "",
+  repeatMode: "none" as "none" | "daily" | "weekly"
 })
 
 const reminderStore = useReminderStore();
@@ -25,7 +25,7 @@ watch(() => props.editingReminder, (newEditingReminder) => {
     // Mode édition : pré-remplir les champs
     newReminder.value.title = newEditingReminder.title;
     newReminder.value.datetime = newEditingReminder.datetime;
-    newReminder.value.repeatMode = newEditingReminder.repeatMode as 'none' | 'daily' | 'weekly';
+    newReminder.value.repeatMode = newEditingReminder.repeatMode as "none" | "daily" | "weekly";
     selectedDate.value = newEditingReminder.datetime;
     updateDisplayDate();
   } else {
@@ -53,8 +53,8 @@ function addReminder() {
   }
 
   clearReminder();
-  selectedDate.value = '';
-  displayDate.value = '';
+  selectedDate.value = "";
+  displayDate.value = "";
 }
 
 function clearReminder() {
@@ -63,13 +63,13 @@ function clearReminder() {
     datetime: "",
     repeatMode: "none",
   };
-  selectedDate.value = ''
-  displayDate.value = ''
+  selectedDate.value = ""
+  displayDate.value = ""
 }
 
 const hiddenDateInput = ref<HTMLInputElement | null>(null)
-const selectedDate = ref('')
-const displayDate = ref('')
+const selectedDate = ref("")
+const displayDate = ref("")
 
 function openDatePicker() {
   hiddenDateInput.value?.showPicker?.()
@@ -79,12 +79,12 @@ function openDatePicker() {
 function updateDisplayDate() {
   if (selectedDate.value) {
     const date = new Date(selectedDate.value)
-    displayDate.value = date.toLocaleString('fr-FR', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
+    displayDate.value = date.toLocaleString("fr-FR", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit"
     })
     newReminder.value.datetime = selectedDate.value
   }
@@ -110,7 +110,8 @@ function updateDisplayDate() {
         </select>
         <div class="row">
           <white-button :text="'Annuler'" @click="closeSheet(); clearReminder()" class="button-size" />
-          <red-button :text="props.editingReminder ? 'Modifier' : 'Créer'" @click="addReminder(); closeSheet()" class="button-size" />
+          <red-button :text="props.editingReminder ? 'Modifier' : 'Créer'" @click="addReminder(); closeSheet()"
+            class="button-size" />
         </div>
       </div>
     </div>
