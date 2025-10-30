@@ -74,7 +74,3 @@ jobs:
             echo "[FAIL] - your branch is $count commits late. Please rebase."  
             exit 1
           fi 
-          else
-            echo "[FAIL] - your branch is $count commits late. Please rebase."  
-            exit 1
-          fi
