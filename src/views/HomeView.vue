@@ -6,30 +6,18 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
 import AppButton from "@/components/buttons/AppButton.vue";
 import { useReminderStore } from "@/stores/reminders";
+import BottomSheet from "@/components/bottom_sheet/BottomSheet.vue";
 
 const reminderStore = useReminderStore();
 
-const newReminder = ref<{
-  title: string;
-  datetime: string;
-  repeatMode: "none" | "minutely" | "daily" | "weekly" | "monthly" | "yearly";
-}>({
-  title: "",
-  datetime: "",
-  repeatMode: "none",
-});
+const isSheetOpen = ref(false)
 
-function addReminder() {
-  reminderStore.addReminder(
-    newReminder.value.title,
-    newReminder.value.datetime,
-    newReminder.value.repeatMode
-  );
-  newReminder.value = {
-    title: "",
-    datetime: "",
-    repeatMode: "none",
-  };
+function openSheet() {
+  isSheetOpen.value = true
+}
+
+function closeSheet() {
+  isSheetOpen.value = false
 }
 
 // TODO: Remove these functions when not needed anymore
@@ -81,20 +69,17 @@ onMounted(async () => {
     <div class="task-section" :key="key" v-for="(reminders, key) in reminderStore.remindersByDate">
       <h2>{{ key }}</h2>
       <div class="task-list">
-        <task-tile
-          v-for="reminder in reminders"
-          :key="reminder.id"
-          :id="reminder.id"
-          :title="reminder.title"
-          :date="reminder.getTimeString()"
-        />
+        <task-tile v-for="reminder in reminders" :key="reminder.id" :id="reminder.id" :title="reminder.title"
+          :date="reminder.getTimeString()" />
       </div>
     </div>
   </div>
 
   <div class="bottom-action-bar">
-    <app-button :text="'Create new task'" @click="addReminder" />
+    <app-button :text="'Créer une nouvelle tâche'" @click="openSheet" />
   </div>
+
+  <BottomSheet :isSheetOpen="isSheetOpen" @close="closeSheet"></BottomSheet>
 </template>
 
 <style scoped>
