@@ -7,6 +7,12 @@
   --bg-red-light: #f9f2f2;
   --accent-color: #f8002f;
   --content-color: #212121;
+
+  /* Safe area insets */
+  --safe-area-inset-top: env(safe-area-inset-top, 0px);
+  --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-area-inset-left: env(safe-area-inset-left, 0px);
+  --safe-area-inset-right: env(safe-area-inset-right, 0px);
 }
 
 /* semantic color variables for this project */
@@ -69,5 +75,11 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   width: 100vw;
+  margin: 0;
   padding: 24px;
+  /* Safe area adjustments */
+  padding-top: max(24px, env(safe-area-inset-top, 24px));
+  padding-left: max(24px, env(safe-area-inset-left, 24px));
+  padding-right: max(24px, env(safe-area-inset-right, 24px));
+  padding-bottom: 24px;
 }
