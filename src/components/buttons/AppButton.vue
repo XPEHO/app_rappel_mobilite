@@ -8,11 +8,17 @@ defineProps({
     type: Function,
     required: false,
   },
+  color: {
+    type: String,
+    validator: (value) => ["white", "red"].includes(value),
+    required: false,
+    default: "red",
+  },
 });
 </script>
 
 <template>
-  <button class="button-text-size" @click="onClick">
+  <button class="button-text-size" :class="[`button-${color}`]" @click="onClick">
     <p class="button-text">{{ text }}</p>
   </button>
 </template>
@@ -34,19 +40,42 @@ defineProps({
   /* Visual */
   border: 2px solid;
   border-radius: 16px;
-  background-color: #f8002f;
-  border-color: color-mix(in srgb, #f8002f, #000 15%);
-  box-shadow: 0px 4px 0px 0px color-mix(in srgb, #f8002f, #000 15%);
 
   /* Interaction */
   cursor: pointer;
   transition: all 0.1s ease;
 }
 
-/* Active state */
-.button-text-size:active {
+/* RED BUTTON VARIANT */
+.button-red {
+  background-color: #f8002f;
+  border-color: color-mix(in srgb, #f8002f, #000 15%);
+  box-shadow: 0px 4px 0px 0px color-mix(in srgb, #f8002f, #000 15%);
+}
+
+.button-red:active {
   transform: translateY(4px);
   box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0.15) !important;
+}
+
+.button-red .button-text {
+  color: #ffffff;
+}
+
+/* WHITE BUTTON VARIANT */
+.button-white {
+  background-color: #ffffff;
+  border-color: color-mix(in srgb, #ffffff, #000 15%);
+  box-shadow: 0px 4px 0px 0px color-mix(in srgb, #ffffff, #000 15%);
+}
+
+.button-white:active {
+  transform: translateY(4px);
+  box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0.15) !important;
+}
+
+.button-white .button-text {
+  color: #333333;
 }
 
 /* ========================================
@@ -59,9 +88,6 @@ defineProps({
   font-weight: 600;
   letter-spacing: 0.6px;
   text-transform: uppercase;
-
-  /* Color */
-  color: #ffffff;
 
   /* Reset */
   margin: 0;

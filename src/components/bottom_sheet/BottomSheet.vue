@@ -1,40 +1,53 @@
 <script setup lang="ts">
-import { defineProps, defineEmits, ref, watch } from "vue"
+import { defineProps, defineEmits, ref, watch, onUnmounted } from "vue";
 import { useReminderStore } from "@/stores/reminders";
-import RedButton from "@/components/buttons/AppButton.vue";
-import WhiteButton from "@/components/buttons/WhiteButton.vue";
+import AppButton from "@/components/buttons/AppButton.vue";
 import type { Reminder } from "@/types/reminder";
 
 const props = defineProps<{
   isSheetOpen: boolean;
   editingReminder?: Reminder | null;
-}>()
-const emit = defineEmits(["close"])
-const closeSheet = () => emit("close")
+}>();
+const emit = defineEmits(["close"]);
+const closeSheet = () => emit("close");
+
 const newReminder = ref({
   title: "",
   datetime: "",
-  repeatMode: "none" as "none" | "daily" | "weekly"
-})
+  repeatMode: "none" as "none" | "daily" | "weekly",
+});
 
 const reminderStore = useReminderStore();
 
+// Form related refs
+const hiddenDateInput = ref<HTMLInputElement | null>(null);
+const selectedDate = ref("");
+const displayDate = ref("");
+
 // Watch for editing reminder changes
-watch(() => props.editingReminder, (newEditingReminder) => {
-  if (newEditingReminder) {
-    // Mode édition : pré-remplir les champs
-    newReminder.value.title = newEditingReminder.title;
-    newReminder.value.datetime = newEditingReminder.datetime;
-    newReminder.value.repeatMode = newEditingReminder.repeatMode as "none" | "daily" | "weekly";
-    selectedDate.value = newEditingReminder.datetime;
-    updateDisplayDate();
-  } else {
-    // Mode création : vider les champs
-    clearReminder();
-  }
-}, { immediate: true });
+watch(
+  () => props.editingReminder,
+  (newEditingReminder) => {
+    if (newEditingReminder) {
+      // Mode édition : pré-remplir les champs
+      newReminder.value.title = newEditingReminder.title;
+      newReminder.value.datetime = newEditingReminder.datetime;
+      newReminder.value.repeatMode = newEditingReminder.repeatMode as "none" | "daily" | "weekly";
+      selectedDate.value = newEditingReminder.datetime;
+      updateDisplayDate();
+    } else {
+      // Mode création : vider les champs
+      clearReminder();
+    }
+  },
+  { immediate: true }
+);
 
 function addReminder() {
+  if (!newReminder.value.title || !newReminder.value.datetime) {
+    alert("Veuillez remplir tous les champs avant de continuer.");
+    return;
+  }
   if (props.editingReminder) {
     // Mode édition
     reminderStore.updateReminder(
@@ -51,10 +64,12 @@ function addReminder() {
       newReminder.value.repeatMode
     );
   }
+  closeSheet();
+}
 
+function handleCancel() {
   clearReminder();
-  selectedDate.value = "";
-  displayDate.value = "";
+  closeSheet();
 }
 
 function clearReminder() {
@@ -63,43 +78,60 @@ function clearReminder() {
     datetime: "",
     repeatMode: "none",
   };
-  selectedDate.value = ""
-  displayDate.value = ""
+  selectedDate.value = "";
+  displayDate.value = "";
 }
 
-const hiddenDateInput = ref<HTMLInputElement | null>(null)
-const selectedDate = ref("")
-const displayDate = ref("")
-
 function openDatePicker() {
-  hiddenDateInput.value?.showPicker?.()
-  hiddenDateInput.value?.click()
+  hiddenDateInput.value?.showPicker?.();
+  hiddenDateInput.value?.click();
 }
 
 function updateDisplayDate() {
   if (selectedDate.value) {
-    const date = new Date(selectedDate.value)
+    const date = new Date(selectedDate.value);
     displayDate.value = date.toLocaleString("fr-FR", {
       day: "2-digit",
       month: "2-digit",
       year: "numeric",
       hour: "2-digit",
-      minute: "2-digit"
-    })
-    newReminder.value.datetime = selectedDate.value
+      minute: "2-digit",
+    });
+    newReminder.value.datetime = selectedDate.value;
   }
 }
+
+// Cleanup on unmount
+onUnmounted(() => {
+  clearReminder();
+});
 </script>
 
 <template>
   <transition name="slide-up">
     <div v-if="isSheetOpen" class="bottom-sheet">
       <div class="sheet-content">
-        <input v-model="newReminder.title" type="text" placeholder="Titre de la tâche" class="custom-input" />
-        <input type="text" v-model="displayDate" placeholder="01/01/1970 09:00" class="custom-input" readonly
-          @click="openDatePicker" />
-        <input ref="hiddenDateInput" type="datetime-local" v-model="selectedDate" @change="updateDisplayDate"
-          style="display: none" />
+        <input
+          v-model="newReminder.title"
+          type="text"
+          placeholder="Titre de la tâche"
+          class="custom-input"
+        />
+        <input
+          type="text"
+          v-model="displayDate"
+          placeholder="01/01/1970 09:00"
+          class="custom-input"
+          readonly
+          @click="openDatePicker"
+        />
+        <input
+          ref="hiddenDateInput"
+          type="datetime-local"
+          v-model="selectedDate"
+          @change="updateDisplayDate"
+          style="display: none"
+        />
         <select v-model="newReminder.repeatMode" class="custom-input-select">
           <option value="none">Aucune répétition</option>
           <option value="minutely">Chaque minute</option>
@@ -109,9 +141,13 @@ function updateDisplayDate() {
           <option value="yearly">Annuelle</option>
         </select>
         <div class="row">
-          <white-button :text="'Annuler'" @click="closeSheet(); clearReminder()" class="button-size" />
-          <red-button :text="props.editingReminder ? 'Modifier' : 'Créer'" @click="addReminder(); closeSheet()"
-            class="button-size" />
+          <app-button color="white" :text="'Annuler'" @click="handleCancel" class="button-size" />
+          <app-button
+            color="red"
+            :text="props.editingReminder ? 'Modifier' : 'Créer'"
+            @click="addReminder"
+            class="button-size"
+          />
         </div>
       </div>
     </div>
@@ -139,22 +175,12 @@ function updateDisplayDate() {
   transform: translateY(100%);
 }
 
-.overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.3);
-  z-index: 20;
-}
-
 .bottom-sheet {
   position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
-  background: #F9F2F2;
+  background: #f9f2f2;
   border-top-left-radius: 32px;
   border-top-right-radius: 32px;
   box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.2);
