@@ -43,8 +43,8 @@ function closeSheet() {
   editingReminder.value = null;
 }
 
-function handleTaskDone(task: { id: number; title: string; date: string }) {
-  reminderStore.deleteReminder(task.id);
+function handleTaskDone(id: number) {
+  reminderStore.completeReminder(id);
 }
 
 onMounted(async () => {
@@ -71,7 +71,7 @@ onMounted(async () => {
           :key="reminder.id"
           :id="reminder.id"
           :title="reminder.title"
-          :date="reminder.getTimeString()"
+          :date="reminder.getDisplayString()"
           @task-done="handleTaskDone"
           @edit-task="openEditSheet"
           @delete-task="reminderStore.deleteReminder(reminder.id)"

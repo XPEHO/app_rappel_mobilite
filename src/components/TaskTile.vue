@@ -151,7 +151,7 @@ function triggerSwipeAction() {
 
 function onSwipeLeft() {
   // Emit an event that parent components can listen to
-  emit("task-done", { id: props.id, title: props.title, date: props.date });
+  emit("task-done", props.id);
 }
 
 function closePopup() {

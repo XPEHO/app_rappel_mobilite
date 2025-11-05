@@ -134,7 +134,6 @@ onUnmounted(() => {
         />
         <select v-model="newReminder.repeatMode" class="custom-input-select">
           <option value="none">Aucune répétition</option>
-          <option value="minutely">Chaque minute</option>
           <option value="daily">Quotidienne</option>
           <option value="weekly">Hebdomadaire</option>
           <option value="monthly">Mensuelle</option>

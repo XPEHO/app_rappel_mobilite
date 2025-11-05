@@ -44,11 +44,11 @@ onUnmounted(() => {
   <div class="task-tile-popup" v-if="visible" ref="popupRef">
     <div class="task-tile-popup-option">
       <font-awesome-icon :icon="faPen" style="color: var(--accent-color)" />
-      <button @click="editTask">Edit task</button>
+      <button @click="editTask">Modifier le rappel</button>
     </div>
     <div class="task-tile-popup-option">
       <font-awesome-icon :icon="faXmark" style="color: var(--accent-color)" />
-      <button @click="deleteTask">Delete task</button>
+      <button @click="deleteTask">Supprimer le rappel</button>
     </div>
   </div>
 </template>

@@ -1,16 +1,25 @@
+import {
+  isDateBeforeToday,
+  isDateThisWeek,
+  plusOneDay,
+  plusOneMonth,
+  plusOneWeek,
+  plusOneYear,
+} from "@/utils/date_utils";
+
 export class Reminder {
   id: number;
   title: string;
   datetime: string; // ISO format
-  repeatMode: "minutely" | "daily" | "weekly" | "monthly" | "yearly" | "none";
+  repeatMode: "daily" | "weekly" | "monthly" | "yearly" | "none";
 
   constructor(
-    id: number,
+    id: number | null,
     title: string,
     datetime: string,
-    repeatMode: "minutely" | "daily" | "weekly" | "monthly" | "yearly" | "none"
+    repeatMode: "daily" | "weekly" | "monthly" | "yearly" | "none"
   ) {
-    this.id = id;
+    this.id = id ?? Date.now() % 2147483647;
     this.title = title;
     this.datetime = datetime;
     this.repeatMode = repeatMode;
@@ -20,15 +29,21 @@ export class Reminder {
     return new Date(this.datetime) > new Date();
   }
 
-  getNextOccurrence(): Date {
+  getNextOccurrence(): Date | null {
     const baseDate = new Date(this.datetime);
 
-    if (this.repeatMode === "none") {
-      return baseDate;
+    switch (this.repeatMode) {
+      case "daily":
+        return plusOneDay(baseDate);
+      case "weekly":
+        return plusOneWeek(baseDate);
+      case "monthly":
+        return plusOneMonth(baseDate);
+      case "yearly":
+        return plusOneYear(baseDate);
+      default:
+        return null;
     }
-
-    // Add logic for repeat calculations
-    return baseDate;
   }
 
   getDateTimeString(): string {
@@ -42,5 +57,26 @@ export class Reminder {
       .toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
       .replace(":", "h")
       .replace(/^0/, "");
+  }
+
+  getDateString(): string {
+    const date = new Date(this.datetime);
+    const formatted = date.toLocaleDateString("fr-FR", {
+      weekday: "short",
+      day: "numeric",
+      month: "short",
+    });
+
+    // Capitalize first letter of weekday and month
+    return formatted
+      .replace(/^\w/, (char) => char.toUpperCase())
+      .replace(/(\s\w)/g, (match) => match.toUpperCase());
+  }
+
+  getDisplayString(): string {
+    const date = new Date(this.datetime);
+    return isDateThisWeek(date) && !isDateBeforeToday(date)
+      ? this.getTimeString()
+      : this.getDateString();
   }
 }
