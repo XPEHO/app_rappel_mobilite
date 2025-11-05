@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
+import { ref, onMounted, watch } from "vue";
 import { LocalNotifications } from "@capacitor/local-notifications";
 import TaskTile from "@/components/TaskTile.vue";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
@@ -13,6 +13,20 @@ const reminderStore = useReminderStore();
 
 const isSheetOpen = ref(false);
 const editingReminder = ref<Reminder | null>(null);
+
+watch(isSheetOpen, (newValue) => {
+  if (newValue) {
+    // Lock body scroll when sheet opens
+    document.body.style.overflow = "hidden";
+    document.body.style.position = "fixed";
+    document.body.style.width = "100%";
+  } else {
+    // Restore body scroll when sheet closes
+    document.body.style.overflow = "";
+    document.body.style.position = "";
+    document.body.style.width = "";
+  }
+});
 
 function openSheet() {
   editingReminder.value = null;
@@ -33,7 +47,6 @@ function handleTaskDone(task: { id: number; title: string; date: string }) {
   reminderStore.deleteReminder(task.id);
 }
 
-
 onMounted(async () => {
   // Request permissions on app start
   reminderStore.init();
@@ -47,28 +60,37 @@ onMounted(async () => {
 
     <div class="task-empty" v-if="Object.keys(reminderStore.remindersByDate).length === 0">
       <font-awesome-icon :icon="faCheckCircle" style="color: var(--accent-color)" />
-      <p>
-        <span>Tout est terminé ici !</span><br />
-      </p>
+      <p><span>Tout est terminé ici !</span><br /></p>
     </div>
 
     <div class="task-section" :key="key" v-for="(reminders, key) in reminderStore.remindersByDate">
       <h2>{{ key }}</h2>
       <div class="task-list">
-        <task-tile v-for="reminder in reminders" :key="reminder.id" :id="reminder.id" :title="reminder.title"
+        <task-tile
+          v-for="reminder in reminders"
+          :key="reminder.id"
+          :id="reminder.id"
+          :title="reminder.title"
           :date="reminder.getTimeString()"
           @task-done="handleTaskDone"
           @edit-task="openEditSheet"
-          @delete-task="reminderStore.deleteReminder(reminder.id);" />
+          @delete-task="reminderStore.deleteReminder(reminder.id)"
+        />
       </div>
     </div>
   </div>
 
   <div class="bottom-action-bar">
-    <app-button :text="'Créer une nouvelle tâche'" @click="openSheet" />
+    <app-button color="red" :text="'Créer une nouvelle tâche'" @click="openSheet" />
   </div>
 
-  <BottomSheet :isSheetOpen="isSheetOpen" :editingReminder="editingReminder" @close="closeSheet"></BottomSheet>
+  <div v-if="isSheetOpen" class="overlay" @click="closeSheet"></div>
+
+  <bottom-sheet
+    :isSheetOpen="isSheetOpen"
+    :editingReminder="editingReminder"
+    @close="closeSheet"
+  ></bottom-sheet>
 </template>
 
 <style scoped>
@@ -152,5 +174,15 @@ h2 {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.3);
+  z-index: 150;
 }
 </style>
