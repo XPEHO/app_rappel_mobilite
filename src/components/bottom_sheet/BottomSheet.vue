@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { defineProps, defineEmits, ref, watch, onUnmounted } from "vue";
+import { defineProps, defineEmits, ref, watch } from "vue";
 import { useReminderStore } from "@/stores/reminders";
 import AppButton from "@/components/buttons/AppButton.vue";
 import type { Reminder } from "@/types/reminder";
@@ -23,6 +23,10 @@ const reminderStore = useReminderStore();
 const hiddenDateInput = ref<HTMLInputElement | null>(null);
 const selectedDate = ref("");
 const displayDate = ref("");
+
+// Detect if we're on iOS
+const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+             (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
 
 // Watch for editing reminder changes
 watch(
@@ -83,8 +87,43 @@ function clearReminder() {
 }
 
 function openDatePicker() {
-  hiddenDateInput.value?.showPicker?.();
-  hiddenDateInput.value?.click();
+  if (!hiddenDateInput.value) return;
+
+  if (isIOS) {
+    // Sur iOS, rendre l'input temporairement visible
+    Object.assign(hiddenDateInput.value.style, {
+      position: "fixed",
+      left: "50%",
+      top: "50%",
+      transform: "translate(-50%, -50%)",
+      opacity: "0.01",
+      zIndex: "9999",
+      display: "block"
+    });
+    hiddenDateInput.value.focus();
+    hiddenDateInput.value.click();
+  } else if (hiddenDateInput.value.showPicker) {
+    // Android/Web avec showPicker si disponible
+    try {
+      hiddenDateInput.value.showPicker();
+    } catch {
+      hiddenDateInput.value.focus();
+    }
+  } else {
+    hiddenDateInput.value.focus();
+  }
+}
+
+const hideIOSDateInput = () => {
+  if (isIOS && hiddenDateInput.value) {
+    Object.assign(hiddenDateInput.value.style, {
+      display: "none",
+      position: "absolute",
+      left: "-9999px",
+      opacity: "0",
+      zIndex: "-1"
+    });
+  }
 }
 
 function updateDisplayDate() {
@@ -100,11 +139,6 @@ function updateDisplayDate() {
     newReminder.value.datetime = selectedDate.value;
   }
 }
-
-// Cleanup on unmount
-onUnmounted(() => {
-  clearReminder();
-});
 </script>
 
 <template>
@@ -130,6 +164,7 @@ onUnmounted(() => {
           type="datetime-local"
           v-model="selectedDate"
           @change="updateDisplayDate"
+          @blur="hideIOSDateInput"
           style="display: none"
         />
         <select v-model="newReminder.repeatMode" class="custom-input-select">
@@ -155,16 +190,6 @@ onUnmounted(() => {
 </template>
 
 <style scoped>
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.3s;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-}
-
 .slide-up-enter-active,
 .slide-up-leave-active {
   transition: transform 0.3s ease;
@@ -214,7 +239,8 @@ onUnmounted(() => {
   width: 100px;
 }
 
-.custom-input {
+.custom-input,
+.custom-input-select {
   width: 100%;
   padding: 12px 16px;
   border: none;
@@ -231,27 +257,13 @@ onUnmounted(() => {
   color: #999;
 }
 
-.custom-input:focus {
-  box-shadow: 0 0 0 2px rgba(248, 0, 47, 0.2);
-  background-color: #fff;
-}
-
+.custom-input:focus,
 .custom-input-select:focus {
   box-shadow: 0 0 0 2px rgba(248, 0, 47, 0.2);
   background-color: #fff;
 }
 
 .custom-input-select {
-  width: 100%;
-  padding: 12px 16px;
-  border: none;
-  border-radius: 16px;
-  background-color: #fff;
-  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
-  font-size: 16px;
-  color: #333;
-  outline: none;
-  transition: box-shadow 0.2s ease;
   appearance: none;
   background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg fill='gray' height='20' viewBox='0 0 24 24' width='20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
