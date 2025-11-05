@@ -174,6 +174,10 @@ h2 {
   display: flex;
   align-items: center;
   justify-content: center;
+  padding-top: 16px;
+  padding-bottom: calc(16px + env(safe-area-inset-bottom, 34px));
+  padding-left: env(safe-area-inset-left, 0px);
+  padding-right: env(safe-area-inset-right, 0px);
 }
 
 .overlay {

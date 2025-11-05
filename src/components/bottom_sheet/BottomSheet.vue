@@ -188,6 +188,9 @@ onUnmounted(() => {
   max-height: 50%;
   overflow-y: auto;
   padding: 20px;
+  padding-bottom: calc(20px + env(safe-area-inset-bottom, 34px));
+  padding-left: calc(20px + env(safe-area-inset-left, 0px));
+  padding-right: calc(20px + env(safe-area-inset-right, 0px));
 }
 
 .sheet-content {

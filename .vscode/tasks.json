@@ -1,0 +1,43 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "shell",
+			"command": "npx",
+			"args": ["cap", "sync"],
+			"group": "build",
+			"label": "Capacitor: Sync",
+			"detail": "Copy web assets to native platforms and sync plugins",
+			"problemMatcher": []
+		},
+		{
+			"type": "shell",
+			"command": "npx",
+			"args": ["cap", "run", "android"],
+			"group": "test",
+			"label": "Capacitor: Run Android",
+			"detail": "Run the native app on Android",
+			"problemMatcher": []
+		},
+		{
+			"type": "shell",
+			"command": "npx",
+			"args": ["cap", "run", "ios"],
+			"group": "test",
+			"label": "Capacitor: Run iOS",
+			"detail": "Run the native app on iOS",
+			"problemMatcher": []
+		},
+		{
+			"type": "shell",
+			"command": "npm",
+			"args": ["run", "build"],
+			"group": "build",
+			"label": "Build and Sync",
+			"detail": "Build Vue app and sync with Capacitor",
+			"dependsOrder": "sequence",
+			"dependsOn": ["npm: build", "Capacitor: Sync"],
+			"problemMatcher": []
+		}
+	]
+}
