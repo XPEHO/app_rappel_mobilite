@@ -12,9 +12,12 @@ export default mergeConfig(
       coverage: {
         provider: "v8",
         reporter: ["text", "json", "html", "lcov"],
+        include: ["src/**/*.{js,ts,vue}"],
         exclude: [
           "coverage/**",
           "dist/**",
+          "android/**",
+          "ios/**",
           "**/node_modules/**",
           "**/[.]**",
           "packages/*/test?(s)/**",
