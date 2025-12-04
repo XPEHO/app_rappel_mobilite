@@ -1,0 +1,42 @@
+name: Unit tests
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Cache npm
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-18-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-18-
+
+      - name: Setup Node.js 18
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: |
+          if [ -f package-lock.json ]; then
+            npm ci
+          else
+            npm install
+          fi
+
+      - name: Run unit tests (Vitest)
+        # The "-- --run" flag forces Vitest to run once and then exit (non-interactive), which is required in CI.
+        # NOTE: This step currently runs unit tests only (npm run test:unit).
+        #       Once integration tests are added, add a new line or update this one to run the integration tests
+        #       (for example add a new line `npm run test:integration`)
+        #       Do not forget to update this workflow's name consequently
+        run: npm run test:unit -- --run
+
