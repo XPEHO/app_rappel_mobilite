@@ -37,5 +37,6 @@ jobs:
         # NOTE: This step currently runs unit tests only (npm run test:unit).
         #       Once integration tests are added, add a new line or update this one to run the integration tests
         #       (for example add a new line `npm run test:integration`)
+        #       Do not forget to update this workflow's name consequently
         run: npm run test:unit -- --run
 
