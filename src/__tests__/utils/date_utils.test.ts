@@ -9,7 +9,7 @@ import {
     isDateBeforeToday,
     isDateThisWeek,
     isDateInNextWeek,
-} from "../utils/date_utils";
+} from "../../utils/date_utils";
 
 describe("date_utils", () => {
     describe("plusOneYear", () => {
@@ -175,8 +175,8 @@ describe("date_utils", () => {
 
     describe("isDateBeforeToday", () => {
         beforeEach(() => {
-            // Mock the current date to 2024-01-15 12:00:00
             vi.useFakeTimers();
+            // Fix today's date to Jan 15, 2024 so tests are consistent
             vi.setSystemTime(new Date(2024, 0, 15, 12, 0, 0));
         });
 
@@ -212,8 +212,8 @@ describe("date_utils", () => {
 
     describe("isDateThisWeek", () => {
         beforeEach(() => {
-            // Mock to Wednesday 2024-01-17 12:00:00 (mid-week)
             vi.useFakeTimers();
+            // Fix today's date to Jan 17, 2024 so tests are consistent
             vi.setSystemTime(new Date(2024, 0, 17, 12, 0, 0));
         });
 
@@ -249,8 +249,8 @@ describe("date_utils", () => {
 
     describe("isDateInNextWeek", () => {
         beforeEach(() => {
-            // Mock to Wednesday 2024-01-17 12:00:00
             vi.useFakeTimers();
+            // Fix today's date to Jan 17, 2024 so tests are consistent
             vi.setSystemTime(new Date(2024, 0, 17, 12, 0, 0));
         });
 
