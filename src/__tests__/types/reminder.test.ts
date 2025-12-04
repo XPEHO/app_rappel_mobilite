@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
-import { Reminder } from "../types/reminder";
+import { Reminder } from "../../types/reminder";
 
 describe("Reminder", () => {
   describe("constructor", () => {
@@ -36,6 +36,7 @@ describe("Reminder", () => {
   describe("isActive", () => {
     beforeEach(() => {
       vi.useFakeTimers();
+        // Fix today's date to Dec 4, 2024 so tests are consistent
       vi.setSystemTime(new Date("2024-12-04T12:00:00"));
     });
 
@@ -172,7 +173,7 @@ describe("Reminder", () => {
   describe("getDisplayString", () => {
     beforeEach(() => {
       vi.useFakeTimers();
-      // Mock to Wednesday 2024-01-17 12:00:00
+      // Fix today's date to Jan 17, 2024 so tests are consistent
       vi.setSystemTime(new Date(2024, 0, 17, 12, 0, 0));
     });
 
