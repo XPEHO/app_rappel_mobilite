@@ -56,7 +56,7 @@ onMounted(async () => {
 
 <template>
   <div class="page-content">
-    <h1>Remembrall</h1>
+    <h1>NAME</h1>
 
     <div class="task-empty" v-if="Object.keys(reminderStore.remindersByDate).length === 0">
       <font-awesome-icon :icon="faCheckCircle" style="color: var(--accent-color)" />
@@ -66,16 +66,9 @@ onMounted(async () => {
     <div class="task-section" :key="key" v-for="(reminders, key) in reminderStore.remindersByDate">
       <h2>{{ key }}</h2>
       <div class="task-list">
-        <task-tile
-          v-for="reminder in reminders"
-          :key="reminder.id"
-          :id="reminder.id"
-          :title="reminder.title"
-          :date="reminder.getDisplayString()"
-          @task-done="handleTaskDone"
-          @edit-task="openEditSheet"
-          @delete-task="reminderStore.deleteReminder(reminder.id)"
-        />
+        <task-tile v-for="reminder in reminders" :key="reminder.id" :id="reminder.id" :title="reminder.title"
+          :date="reminder.getDisplayString()" @task-done="handleTaskDone" @edit-task="openEditSheet"
+          @delete-task="reminderStore.deleteReminder(reminder.id)" />
       </div>
     </div>
   </div>
@@ -86,11 +79,7 @@ onMounted(async () => {
 
   <div v-if="isSheetOpen" class="overlay" @click="closeSheet"></div>
 
-  <bottom-sheet
-    :isSheetOpen="isSheetOpen"
-    :editingReminder="editingReminder"
-    @close="closeSheet"
-  ></bottom-sheet>
+  <bottom-sheet :isSheetOpen="isSheetOpen" :editingReminder="editingReminder" @close="closeSheet"></bottom-sheet>
 </template>
 
 <style scoped>
