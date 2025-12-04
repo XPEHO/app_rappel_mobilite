@@ -1,0 +1,11 @@
+appId: com.xpeho.app.rappel
+---
+- launchApp
+- tapOn: "Créer une nouvelle tâche"
+- tapOn: "Titre de la tâche"
+- inputText: "Test 1"
+- tapOn: "01/01/1970 09:00"
+- tapOn: "set"
+- tapOn: "Aucune répétition"
+- tapOn: "Quotidienne"
+- tapOn: "Créer"
