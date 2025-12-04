@@ -20,9 +20,10 @@ maestro start-device --platform=ios
 
 ## Create a flow file
 
-A maestro folder as been created, you can create a flow file in it to run a test
+A maestro folder has been created, you can create a flow file in it to run a test
 
 [See file structure](https://docs.maestro.dev/getting-started/writing-your-first-flow)
+
 [See commands](https://docs.maestro.dev/api-reference/commands)
 
 ## Run a test
