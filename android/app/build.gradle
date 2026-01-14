@@ -1,10 +1,10 @@
 apply plugin: 'com.android.application'
 
 android {
-    namespace "com.xpeho.app.rappel"
+    namespace "com.xpeho.nemotechnik"
     compileSdk rootProject.ext.compileSdkVersion
     defaultConfig {
-        applicationId "com.xpeho.app.rappel"
+        applicationId "com.xpeho.nemotechnik"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
