@@ -1,4 +1,4 @@
-appId: com.xpeho.app.rappel
+appId: com.xpeho.nemotechnik
 ---
 - launchApp
 - tapOn: "Créer une nouvelle tâche"

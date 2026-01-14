@@ -1,7 +1,7 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'com.xpeho.app.rappel',
+  appId: 'com.xpeho.nemotechnik',
   appName: 'app_rappel_mobilite',
   webDir: 'dist',
   plugins: {

@@ -1,4 +1,4 @@
-package com.xpeho.app.rappel;
+package com.xpeho.nemotechnik;
 
 import com.getcapacitor.BridgeActivity;
 
